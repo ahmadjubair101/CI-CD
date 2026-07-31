@@ -1,0 +1,11 @@
+name: CICD Workflow
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Testing this workflow
+        run: echo "Hello, Everyone!"
