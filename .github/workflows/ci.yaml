@@ -5,29 +5,31 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+
     strategy:
-      matrix:
-        python-version: [3.8, 3.9, 3.10]
+  matrix:
+    python-version: ["3.8", "3.9", "3.10"]
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: install dependencies
+      - name: Install dependencies
         run: |
-          cd CI-CD/Matrix\ builds\ \&\ Parallel\ testing
+          cd "Matrix builds & Parallel testing"
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install -r requirements.txt
 
       - name: Run tests
         run: |
-          cd CI-CD/Matrix\ builds\ \&\ Parallel\ testing
+          cd "Matrix builds & Parallel testing"
           python -m unittest discover
 
-      - name: notify us of success
-        run: echo "Build and tests passed successfully!" ${{ matrix.python-version }}
+      - name: Notify us of success
         if: success()
+        run: echo "Build and tests passed successfully on Python ${{ matrix.python-version }}"
