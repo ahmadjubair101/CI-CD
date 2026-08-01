@@ -1,11 +1,33 @@
-name: CICD Workflow
+name: Matrix builds Pipeline
 
 on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, 3.10]
     steps:
-      - uses: actions/checkout@v2
-      - name: Testing this workflow
-        run: echo "Hello, Everyone!"
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: install dependencies
+        run: |
+          cd CI-CD/Matrix\ builds\ \&\ Parallel\ testing
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Run tests
+        run: |
+          cd CI-CD/Matrix\ builds\ \&\ Parallel\ testing
+          python -m unittest discover
+
+      - name: notify us of success
+        run: echo "Build and tests passed successfully!" ${{ matrix.python-version }}
+        if: success()
