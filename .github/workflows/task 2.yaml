@@ -21,7 +21,7 @@ jobs:
 
             - name: Build Docker image
               run: |
-                  docker build -t ${{ secrets.DOCKER_USERNAME }}/cd-demo ./app
+                  docker build -t ${{ secrets.DOCKER_USERNAME }}/cd-demo .
 
             - name: Push Docker image
               run: |
