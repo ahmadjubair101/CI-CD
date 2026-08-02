@@ -1,0 +1,222 @@
+Step 1 — Create a Simple Application
+
+Inside your repo:
+
+mkdir app
+cd app
+
+Create:
+
+touch app.js package.json Dockerfile
+app.js
+
+Add:
+
+const express = require("express");
+
+const app = express();
+
+const PORT = 3000;
+
+app.get("/", (req, res) => {
+    res.send("Application deployed using GitHub Actions CD Pipeline 🚀");
+});
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
+package.json
+
+Add:
+
+{
+  "name": "cd-demo",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^5.0.0"
+  }
+}
+Step 2 — Create Dockerfile
+
+Inside /app/Dockerfile
+
+Add:
+
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package*.json .
+
+RUN npm install
+
+COPY .
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
+Step 3 — Test Docker Locally
+
+From the app folder:
+
+Build:
+
+docker build -t cd-demo .
+
+Run:
+
+docker run -p 3000:3000 cd-demo
+
+Open:
+
+http://localhost:3000
+
+You should see:
+
+Application deployed using GitHub Actions CD Pipeline 🚀
+Step 4 — Create Docker Hub Repository
+
+Create an account:
+
+Docker Hub
+
+Create a repository:
+
+Example:
+
+ahmadjubair/cd-demo
+Step 5 — Create Docker Hub Access Token
+
+Go to:
+
+Docker Hub → Account Settings → Security
+
+Create:
+
+New Access Token
+
+Copy the token.
+
+Step 6 — Add GitHub Secrets
+
+Go to:
+
+Your GitHub Repo:
+
+Settings
+   |
+   └── Secrets and variables
+          |
+          └── Actions
+
+Add:
+
+Secret 1
+
+Name:
+
+DOCKER_USERNAME
+
+Value:
+
+your docker username
+Secret 2
+
+Name:
+
+DOCKER_PASSWORD
+
+Value:
+
+your Docker token
+Step 7 — Create CD Workflow
+
+Create:
+
+.github/workflows/cd.yaml
+
+Add:
+
+name: CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+
+  build-and-deploy:
+
+    runs-on: ubuntu-latest
+
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/cd-demo ./app
+
+
+      - name: Push Docker image
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/cd-demo
+
+
+      - name: Deploy step
+        run: |
+          echo "Deployment completed successfully 🚀"
+Step 8 — Commit and Push
+
+From your repo:
+
+git add .
+
+Commit:
+
+git commit -m "Add Docker CD pipeline"
+
+Push:
+
+git push origin main
+Step 9 — Check GitHub Actions
+
+Go to:
+
+GitHub Repo
+
+↓
+
+Actions
+
+↓
+
+CD Pipeline
+
+You should see:
+
+✓ Checkout code
+
+✓ Login to Docker Hub
+
+✓ Build Docker image
+
+✓ Push Docker image
+
+✓ Deploy step
