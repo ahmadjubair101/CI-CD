@@ -41,7 +41,28 @@ These included:
 
 **Built a GitHub Actions workflow (.github/workflows/task 1.yaml) that automatically runs whenever code is pushed or a pull request is opened.** 
 
-# Configured the workflow to:
+# Created a Dockerfile to define how the application should be packaged into a Docker image.
+This included:
+
+**Built a GitHub Actions workflow (task 2.yaml) to automate the Docker build process.**
+
+**Configured the workflow to trigger on GitHub events (such as push).**
+
+**Used GitHub-hosted runners to perform the Docker build in a clean environment.**
+
+**Verified that the Docker image builds successfully without actually deploying it.**'
+
+**Troubleshooted common pipeline issues, including:
+
+**Missing Dockerfile**
+
+**Incorrect file names and paths**
+
+**Workflow configuration errors**
+
+**Repository structure issues**
+
+# Configured the workflow on Project 1 to:
 
 **Check out the repository.**
 
@@ -54,6 +75,8 @@ These included:
 **Execute the unit tests.**
 
 **Organised the project inside your repository and resolved issues caused by Git tracking the project as a submodule instead of a normal folder.**
+
+# 
 
 # Key CI concepts learned
 
