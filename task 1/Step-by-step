@@ -1,0 +1,169 @@
+#Step 1 — Create your folder and file
+
+mkdir task-1
+cd task-1
+
+
+#Step 2 — Create a simple Node.js project
+
+Inside task-1 terminal, run: npm init -y
+This creates: package.json
+
+Install testing and linting tools: npm install --save-dev jest eslint
+
+
+#Step 3 — Create your application code
+
+Create a file: touch app.js
+
+Add the following onto the file:
+
+function add(a, b) {
+    return a + b;
+}
+
+module.exports = add;
+
+#Step 4 — Create a unit test
+
+Create a file: app.test.js
+
+Add into that file:
+
+const add = require("../app");
+
+test("adds two numbers", () => {
+    expect(add(2, 3)).toBe(5);
+});
+
+#Step 5 — Configure Jest
+
+Open the package.json file.
+
+Change the scripts section to show:
+
+
+"scripts": {
+    "test": "jest",
+    "lint": "eslint ."
+}
+
+Now you can run:npm test
+
+Expected: PASS app.test.js
+
+
+Step 6 — Configure ESLint
+
+Create another file: touch eslint.config.js
+
+Add the following:
+
+module.exports = [
+    {
+        files: ["**/*.js"],
+        rules: {
+            semi: "error",
+            quotes: ["error", "double"]
+        }
+    }
+];
+
+Test linting: npm run lint
+
+
+Step 7 — Create GitHub Actions workflow
+
+If you do not have one already, create a directory for your workflows:
+mkdir -p .github/workflows
+
+Create a file: touch .github/workflows/ci.yml
+
+
+Step 8 — Add CI pipeline
+
+Open the yaml file: .github/workflows/yml
+
+Add the following in:
+
+name: Node.js CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+
+      - name: Install dependencies
+        run: npm install
+
+
+      - name: Run linting
+        run: npm run lint
+
+
+      - name: Run tests
+        run: npm test
+
+
+Step 9 — Test locally first
+
+Run: npm run lint
+
+Then run: npm test
+Both should pass.
+
+
+Step 10 — Push to GitHub
+
+From task-1 directory:
+Run the following:
+git init
+git add .
+git commit -m "Create basic CI pipeline"
+
+Connect your GitHub repository:
+git remote add origin https://github.com/YOUR_USERNAME/YOUR REPOSITORY.git
+
+Push: git push -u origin main
+
+
+Step 11 — Check GitHub Actions
+
+Go to: GitHub Repository
+        ↓
+Actions tab
+Node.js CI Pipeline
+
+You should see:
+
+✓ Checkout code
+✓ Setup Node.js
+✓ Install dependencies
+✓ Run linting
+✓ Run tests
+
+You should also see a green tick.
+
