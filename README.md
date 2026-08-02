@@ -19,6 +19,7 @@ This repository showcases the projects, and the lessons and notes taken in the w
 
 
 **Basic CI/CD Pipeline**- This was focused on creating a basic Continuous Integration (CI) pipeline using GitHub Actions for a Node.js application.
+
 **Docker Build Pipeline**- This focused on creating a Docker Build Pipeline on Github Actions to verify if the application works whenever code is changed.
 
 These included:
